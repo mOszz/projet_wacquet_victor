@@ -1,0 +1,130 @@
+/* Reset and base setup */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #f2f4f7;
+  color: #2b2d33;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Center the form/summary on the page */
+.container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+}
+
+.card h1 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #1f2933;
+}
+
+/* Form fields */
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #3e4552;
+}
+
+.form-group input {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4f7cff;
+  box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.15);
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  background-color: #4f7cff;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #3a63d9;
+}
+
+/* Error message */
+.error-message {
+  color: #d43939;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  min-height: 1.2em;
+}
+
+/* Summary page */
+.summary-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 16px;
+  margin-bottom: 24px;
+}
+
+.summary-list dt {
+  font-weight: 600;
+  color: #3e4552;
+}
+
+.summary-list dd {
+  color: #1f2933;
+  word-break: break-word;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive layout */
+@media (max-width: 520px) {
+  .card {
+    padding: 24px 20px;
+  }
+
+  .summary-list {
+    grid-template-columns: 1fr;
+    gap: 4px 0;
+  }
+
+  .summary-list dt {
+    margin-top: 8px;
+  }
+}
