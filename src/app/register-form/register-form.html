@@ -1,0 +1,164 @@
+<section class="card">
+  <header class="card-header">
+    <h1>Create an account</h1>
+    <p>All fields are required.</p>
+  </header>
+
+  <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" class="form">
+    <!-- Login -->
+    <div class="field">
+      <label for="login">Login</label>
+      <input
+        id="login"
+        name="login"
+        type="text"
+        autocomplete="username"
+        [(ngModel)]="user.login"
+        #login="ngModel"
+        required
+        [minlength]="loginMinLength"
+      />
+      @if (login.invalid && (login.touched || registerForm.submitted)) {
+        <p class="error">
+          @if (login.hasError('required')) {
+            Login is required.
+          } @else if (login.hasError('minlength')) {
+            Login must be at least {{ loginMinLength }} characters.
+          }
+        </p>
+      }
+    </div>
+
+    <!-- Passwords -->
+    <div class="row">
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          [(ngModel)]="user.password"
+          #password="ngModel"
+          required
+          [minlength]="passwordMinLength"
+        />
+        @if (password.invalid && (password.touched || registerForm.submitted)) {
+          <p class="error">
+            @if (password.hasError('required')) {
+              Password is required.
+            } @else if (password.hasError('minlength')) {
+              Password must be at least {{ passwordMinLength }} characters.
+            }
+          </p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="passwordConfirmation">Confirm password</label>
+        <input
+          id="passwordConfirmation"
+          name="passwordConfirmation"
+          type="password"
+          autocomplete="new-password"
+          [(ngModel)]="user.passwordConfirmation"
+          #passwordConfirmation="ngModel"
+          required
+          [appPasswordMatch]="user.password"
+        />
+        @if (
+          passwordConfirmation.invalid &&
+          (passwordConfirmation.touched || registerForm.submitted)
+        ) {
+          <p class="error">
+            @if (passwordConfirmation.hasError('required')) {
+              Please confirm your password.
+            } @else if (passwordConfirmation.hasError('passwordMismatch')) {
+              Passwords do not match.
+            }
+          </p>
+        }
+      </div>
+    </div>
+
+    <!-- Names -->
+    <div class="row">
+      <div class="field">
+        <label for="lastName">Last name</label>
+        <input
+          id="lastName"
+          name="lastName"
+          type="text"
+          autocomplete="family-name"
+          [(ngModel)]="user.lastName"
+          #lastName="ngModel"
+          required
+        />
+        @if (lastName.invalid && (lastName.touched || registerForm.submitted)) {
+          <p class="error">Last name is required.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="firstName">First name</label>
+        <input
+          id="firstName"
+          name="firstName"
+          type="text"
+          autocomplete="given-name"
+          [(ngModel)]="user.firstName"
+          #firstName="ngModel"
+          required
+        />
+        @if (firstName.invalid && (firstName.touched || registerForm.submitted)) {
+          <p class="error">First name is required.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        [(ngModel)]="user.email"
+        #email="ngModel"
+        required
+        email
+      />
+      @if (email.invalid && (email.touched || registerForm.submitted)) {
+        <p class="error">
+          @if (email.hasError('required')) {
+            Email is required.
+          } @else if (email.hasError('email')) {
+            Please enter a valid email address.
+          }
+        </p>
+      }
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" (click)="onReset(registerForm)">
+        Reset
+      </button>
+      <button type="submit" class="btn btn-primary">Sign up</button>
+    </div>
+  </form>
+
+  @if (registeredUser(); as registered) {
+    <aside class="success" role="status">
+      <h2>Welcome, {{ registered.firstName }}!</h2>
+      <dl>
+        <dt>Login</dt>
+        <dd>{{ registered.login }}</dd>
+        <dt>Name</dt>
+        <dd>{{ registered.firstName }} {{ registered.lastName }}</dd>
+        <dt>Email</dt>
+        <dd>{{ registered.email }}</dd>
+      </dl>
+    </aside>
+  }
+</section>

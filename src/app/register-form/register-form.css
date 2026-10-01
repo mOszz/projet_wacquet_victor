@@ -1,0 +1,175 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius);
+  box-shadow: 8px 8px 0 var(--color-lavender);
+  padding: 2rem;
+}
+
+.card-header {
+  border-left: 6px solid var(--color-peach);
+  padding-left: 0.875rem;
+  margin-bottom: 1.75rem;
+}
+
+.card-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.card-header p {
+  margin: 0.25rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+}
+
+input {
+  font: inherit;
+  padding: 0.65rem 0.75rem;
+  background: var(--color-input);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+input:focus {
+  background: var(--color-surface);
+  border-color: var(--color-ink);
+  box-shadow: 3px 3px 0 var(--color-mint);
+}
+
+/* Angular state classes */
+input.ng-valid.ng-dirty {
+  border-color: var(--color-mint-strong);
+}
+
+input.ng-invalid.ng-touched,
+.ng-submitted input.ng-invalid {
+  border-color: var(--color-error);
+  background: var(--color-error-soft);
+}
+
+.error {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-error-text);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.7rem 1.4rem;
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--color-ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--color-ink);
+}
+
+.btn:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.btn-primary {
+  background: var(--color-mint);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+}
+
+.success {
+  margin-top: 1.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--color-mint-soft);
+  border: 2px solid var(--color-mint-strong);
+  border-radius: var(--radius);
+}
+
+.success h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  color: var(--color-ink);
+}
+
+.success dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 1rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.success dt {
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.success dd {
+  margin: 0;
+  color: var(--color-ink);
+}
+
+@media (max-width: 560px) {
+  .card {
+    padding: 1.25rem;
+    box-shadow: 5px 5px 0 var(--color-lavender);
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,12 +1,10 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { RegisterForm } from './register-form/register-form';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [RegisterForm],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly title = signal('exercice_1');
-}
+export class App {}

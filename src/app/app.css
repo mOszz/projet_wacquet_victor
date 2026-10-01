@@ -1,0 +1,38 @@
+:host {
+  --color-bg: #f6f1ea;
+  --color-surface: #fffdf9;
+  --color-input: #faf6f0;
+  --color-ink: #2f2a3a;
+  --color-muted: #6e6680;
+  --color-border: #d9d2c7;
+
+  --color-mint: #bfe6d3;
+  --color-mint-soft: #e8f6ef;
+  --color-mint-strong: #7cc4a2;
+  --color-lavender: #d9cff2;
+  --color-peach: #f7cdb8;
+
+  --color-error: #e89a9a;
+  --color-error-soft: #fdf0ef;
+  --color-error-text: #b04848;
+
+  --radius: 2px;
+
+  display: block;
+  min-height: 100dvh;
+  background:
+    linear-gradient(135deg, transparent 0 70%, var(--color-peach) 70% 100%),
+    var(--color-bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
