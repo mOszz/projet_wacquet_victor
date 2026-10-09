@@ -1,0 +1,142 @@
+<form class="panel" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="panel-title">
+    <span>Nouvelle déclaration</span>
+    <span class="panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+  </div>
+
+  <div class="grid">
+    <div class="field full">
+      <label for="titre">Titre de la pollution <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="titre"
+        type="text"
+        formControlName="titre"
+        placeholder="Ex. : Bidons abandonnés près du canal"
+        [attr.aria-invalid]="showError('titre')"
+        aria-describedby="titre-error"
+      />
+      @if (showError('titre')) {
+        <p class="error" id="titre-error">{{ errorMessage('titre') }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="type">Type de pollution <abbr title="obligatoire">*</abbr></label>
+      <select
+        id="type"
+        formControlName="type"
+        [attr.aria-invalid]="showError('type')"
+        aria-describedby="type-error"
+      >
+        <option [ngValue]="null" disabled>— Choisir un type —</option>
+        @for (type of types; track type) {
+          <option [ngValue]="type">{{ type }}</option>
+        }
+      </select>
+      @if (showError('type')) {
+        <p class="error" id="type-error">{{ errorMessage('type') }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="dateObservation">Date de l'observation <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="dateObservation"
+        type="date"
+        formControlName="dateObservation"
+        [max]="today"
+        [attr.aria-invalid]="showError('dateObservation')"
+        aria-describedby="dateObservation-error"
+      />
+      @if (showError('dateObservation')) {
+        <p class="error" id="dateObservation-error">{{ errorMessage('dateObservation') }}</p>
+      }
+    </div>
+
+    <div class="field full">
+      <label for="description">Description <abbr title="obligatoire">*</abbr></label>
+      <textarea
+        id="description"
+        rows="5"
+        formControlName="description"
+        placeholder="Décrivez ce que vous avez observé…"
+        [attr.aria-invalid]="showError('description')"
+        aria-describedby="description-error"
+      ></textarea>
+      @if (showError('description')) {
+        <p class="error" id="description-error">{{ errorMessage('description') }}</p>
+      }
+    </div>
+
+    <div class="field full">
+      <label for="lieu">Lieu <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="lieu"
+        type="text"
+        formControlName="lieu"
+        placeholder="Ex. : Berges de la Deûle, Lille"
+        [attr.aria-invalid]="showError('lieu')"
+        aria-describedby="lieu-error"
+      />
+      @if (showError('lieu')) {
+        <p class="error" id="lieu-error">{{ errorMessage('lieu') }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="latitude">Latitude <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="latitude"
+        type="number"
+        step="any"
+        min="-90"
+        max="90"
+        formControlName="latitude"
+        placeholder="Ex. : 50.6292"
+        [attr.aria-invalid]="showError('latitude')"
+        aria-describedby="latitude-error"
+      />
+      @if (showError('latitude')) {
+        <p class="error" id="latitude-error">{{ errorMessage('latitude') }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="longitude">Longitude <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="longitude"
+        type="number"
+        step="any"
+        min="-180"
+        max="180"
+        formControlName="longitude"
+        placeholder="Ex. : 3.0573"
+        [attr.aria-invalid]="showError('longitude')"
+        aria-describedby="longitude-error"
+      />
+      @if (showError('longitude')) {
+        <p class="error" id="longitude-error">{{ errorMessage('longitude') }}</p>
+      }
+    </div>
+
+    <div class="field full">
+      <label for="photoUrl">Photo (URL) <span class="optional">optionnel</span></label>
+      <input
+        id="photoUrl"
+        type="url"
+        formControlName="photoUrl"
+        placeholder="https://…"
+        [attr.aria-invalid]="showError('photoUrl')"
+        aria-describedby="photoUrl-error"
+      />
+      @if (showError('photoUrl')) {
+        <p class="error" id="photoUrl-error">{{ errorMessage('photoUrl') }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="actions">
+    <p class="hint"><abbr title="obligatoire">*</abbr> Champs obligatoires</p>
+    <button type="submit" class="btn btn-primary">Déclarer</button>
+  </div>
+</form>

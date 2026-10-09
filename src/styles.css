@@ -1,0 +1,332 @@
+/* ==========================================================================
+   Charte graphique — Pollution Tracker
+   --------------------------------------------------------------------------
+   Thème : écologie, nature, papier recyclé. Esprit rétro (années 80-90) :
+   angles vifs, bordures épaisses, ombres portées pleines sans flou.
+
+   Couleurs principales
+   - Vert feuille (pastel) : couleur identitaire, actions et zones actives.
+   - Sable / kraft (beige-tan) : fonds, surfaces, barres d'actions.
+   - Vert forêt profond : texte, bordures, ombres (jamais de noir pur).
+
+   Couleurs secondaires (étiquettes de type, tons terre et naturels)
+   - ciel, eau, ocre, argile, lichen, glaise.
+
+   Typographies
+   - Space Mono : titres, libellés, boutons (aspect machine à écrire / terminal).
+   - IBM Plex Sans : texte courant.
+
+   Règles
+   - Rayon des angles : 2px maximum.
+   - Bordures : 2px vert forêt.
+   - Ombres : décalées de 2 à 5px, couleur vert forêt, sans flou.
+   ========================================================================== */
+
+:root {
+  /* Vert feuille — couleur principale */
+  --leaf-50: #f1f8ec;
+  --leaf-100: #e2f0d9;
+  --leaf-200: #cbe4bd;
+  --leaf-300: #afd39c;
+  --leaf-400: #8fbf78;
+
+  /* Sable / kraft — couleur secondaire */
+  --sand-50: #fbf8f1;
+  --sand-100: #f4eddd;
+  --sand-200: #eadfc7;
+  --sand-300: #dcc8a4;
+  --sand-400: #c9ad80;
+
+  /* Vert forêt — encre */
+  --forest-900: #2c3a27;
+  --forest-700: #4b5a43;
+  --forest-500: #6f7d66;
+
+  /* Tons naturels pour les catégories */
+  --nature-sky: #d4e6e8;
+  --nature-water: #c9e4dc;
+  --nature-ochre: #efe0b5;
+  --nature-clay: #ead3c6;
+  --nature-lichen: #e6eccb;
+  --nature-loam: #dccbb5;
+
+  /* Rôles sémantiques */
+  --ink: var(--forest-900);
+  --ink-soft: var(--forest-700);
+  --ink-muted: var(--forest-500);
+  --line: var(--forest-900);
+  --paper: var(--sand-100);
+  --surface: var(--sand-50);
+  --field-bg: #fffdf8;
+  --accent: var(--leaf-300);
+  --accent-soft: var(--leaf-200);
+  --muted-bar: var(--sand-200);
+  --grid-line: rgba(76, 110, 60, 0.08);
+
+  --danger: #9c3d26; /* terre cuite */
+  --danger-bg: #f6e1d6;
+  --focus: #5f9448;
+
+  --radius: 2px;
+  --shadow: 4px 4px 0 var(--ink);
+  --shadow-sm: 2px 2px 0 var(--ink);
+
+  --font-mono: 'Space Mono', ui-monospace, 'Courier New', monospace;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--paper);
+  /* papier kraft millimétré */
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--ink);
+  text-decoration-color: var(--leaf-400);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  background: var(--leaf-100);
+}
+
+abbr[title] {
+  text-decoration: none;
+  color: var(--danger);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--leaf-200);
+}
+
+/* ---------- Panneau façon fenêtre rétro ---------- */
+.panel {
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--accent-soft);
+  border-bottom: 2px solid var(--line);
+}
+
+.panel-title-strong {
+  background: var(--accent);
+}
+
+.panel-dots {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.panel-dots i {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+}
+
+.panel-dots i:nth-child(1) {
+  background: var(--sand-300);
+}
+
+.panel-dots i:nth-child(2) {
+  background: var(--leaf-300);
+}
+
+/* ---------- Champs de formulaire ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.field label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.field .optional {
+  margin-left: 0.35rem;
+  padding: 0 0.3rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+  background: var(--sand-200);
+  border: 1px solid var(--line);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  color: var(--ink);
+  background: var(--field-bg);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow 0.1s,
+    transform 0.1s,
+    background 0.1s;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 7rem;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--ink-muted);
+  opacity: 0.8;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  background: var(--leaf-50);
+  box-shadow: var(--shadow);
+  transform: translate(-1px, -1px);
+}
+
+.field [aria-invalid='true'] {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  box-shadow: 2px 2px 0 var(--danger);
+}
+
+.field .error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--danger);
+}
+
+.field .error::before {
+  content: '! ';
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s,
+    background 0.08s;
+}
+
+.btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.btn-primary {
+  background: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--leaf-400);
+}
+
+/* ---------- Étiquettes de type ---------- */
+.tag {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 2px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+.tag-plastique {
+  background: var(--nature-sky);
+}
+.tag-chimique {
+  background: var(--nature-ochre);
+}
+.tag-depot {
+  background: var(--nature-loam);
+}
+.tag-eau {
+  background: var(--nature-water);
+}
+.tag-air {
+  background: var(--nature-lichen);
+}
+.tag-autre {
+  background: var(--nature-clay);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

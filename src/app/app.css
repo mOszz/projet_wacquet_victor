@@ -1,0 +1,67 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.site-header {
+  position: relative;
+  padding: 2.5rem 0 2.75rem;
+  border-bottom: 2px solid var(--line);
+  background: var(--accent-soft);
+}
+
+/* bandeau rayé vert / kraft */
+.site-header::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 10px;
+  border-top: 2px solid var(--line);
+  background: repeating-linear-gradient(-45deg, var(--leaf-300) 0 10px, var(--sand-300) 10px 20px);
+}
+
+.kicker {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.lead {
+  margin: 0.75rem 0 0;
+  max-width: 60ch;
+  color: var(--ink-soft);
+}
+
+main {
+  flex: 1;
+  padding-block: 2rem 3rem;
+}
+
+.site-footer {
+  padding: 1rem 0;
+  border-top: 2px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  background: var(--sand-200);
+}

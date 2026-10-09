@@ -1,0 +1,21 @@
+<header class="site-header">
+  <div class="container">
+    <p class="kicker"><span aria-hidden="true">♻</span> pollution_tracker</p>
+    <h1>Déclarer une pollution</h1>
+    <p class="lead">
+      Vous avez repéré une pollution ? Renseignez le formulaire ci-dessous pour la signaler.
+    </p>
+  </div>
+</header>
+
+<main class="container">
+  @if (declaration(); as pollution) {
+    <app-pollution-recap [pollution]="pollution" (newDeclaration)="onNewDeclaration()" />
+  } @else {
+    <app-pollution-form (declared)="onDeclared($event)" />
+  }
+</main>
+
+<footer class="site-footer">
+  <div class="container">♻ Pollution Tracker · Ensemble, protégeons notre environnement</div>
+</footer>
