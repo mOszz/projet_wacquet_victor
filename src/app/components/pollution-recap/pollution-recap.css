@@ -1,0 +1,138 @@
+.body {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.body.with-photo {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
+.head h2 {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 1.5rem 0;
+  border: 2px solid var(--line);
+}
+
+.facts > div {
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--line);
+}
+
+.facts > div:nth-child(odd):not(.wide) {
+  border-right: 2px solid var(--line);
+}
+
+.facts > div:last-child {
+  border-bottom: 0;
+}
+
+.facts .wide {
+  grid-column: 1 / -1;
+}
+
+dt {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+
+dd {
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.description {
+  white-space: pre-line;
+}
+
+.map-link {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.photo {
+  margin: 0;
+  align-self: start;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-bottom: 2px solid var(--line);
+}
+
+.photo-fallback {
+  margin: 0;
+  padding: 2rem 1rem;
+  text-align: center;
+  background: var(--nature-clay);
+  border-bottom: 2px solid var(--line);
+}
+
+.photo figcaption {
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 2px solid var(--line);
+  background: var(--muted-bar);
+}
+
+@media (max-width: 760px) {
+  .body.with-photo {
+    grid-template-columns: 1fr;
+  }
+
+  .photo {
+    order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .body {
+    padding: 1rem;
+  }
+
+  .facts {
+    grid-template-columns: 1fr;
+  }
+
+  .facts > div:nth-child(odd):not(.wide) {
+    border-right: 0;
+  }
+
+  .actions {
+    padding: 1rem;
+  }
+
+  .actions .btn {
+    width: 100%;
+  }
+}

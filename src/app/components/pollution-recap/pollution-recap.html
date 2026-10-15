@@ -1,0 +1,68 @@
+<article class="panel" aria-labelledby="recap-title">
+  <div class="panel-title panel-title-strong">
+    <span>
+      Déclaration enregistrée
+      @if (pollution.id) {
+        <span class="mono">n° {{ pollution.id }}</span>
+      }
+    </span>
+    <span class="panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+  </div>
+
+  <div class="body" [class.with-photo]="pollution.photoUrl">
+    <div class="details">
+      <header class="head">
+        <span class="tag" [class]="typeClass">{{ pollution.type }}</span>
+        <h2 id="recap-title">{{ pollution.titre }}</h2>
+      </header>
+
+      <dl class="facts">
+        <div>
+          <dt>Date de l'observation</dt>
+          <dd>{{ pollution.dateObservation | date: 'fullDate' }}</dd>
+        </div>
+        <div>
+          <dt>Lieu</dt>
+          <dd>{{ pollution.lieu }}</dd>
+        </div>
+        <div>
+          <dt>Latitude</dt>
+          <dd class="mono">{{ pollution.latitude | number: '1.0-6' }}</dd>
+        </div>
+        <div>
+          <dt>Longitude</dt>
+          <dd class="mono">{{ pollution.longitude | number: '1.0-6' }}</dd>
+        </div>
+        <div class="wide">
+          <dt>Description</dt>
+          <dd class="description">{{ pollution.description }}</dd>
+        </div>
+      </dl>
+
+      <a class="map-link" [href]="mapUrl" target="_blank" rel="noopener">
+        Voir sur OpenStreetMap ↗
+      </a>
+    </div>
+
+    @if (pollution.photoUrl) {
+      <figure class="photo">
+        @if (!photoFailed()) {
+          <img
+            [src]="pollution.photoUrl"
+            [alt]="'Photo de la pollution : ' + pollution.titre"
+            (error)="photoFailed.set(true)"
+          />
+        } @else {
+          <p class="photo-fallback">Impossible de charger l'image.</p>
+        }
+        <figcaption>
+          <a [href]="pollution.photoUrl" target="_blank" rel="noopener">{{ pollution.photoUrl }}</a>
+        </figcaption>
+      </figure>
+    }
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn" (click)="newDeclaration.emit()">Nouvelle déclaration</button>
+  </div>
+</article>
