@@ -1,22 +1,14 @@
 import { Injectable } from '@angular/core';
 import { RegisteredUser, SignUpRequest } from '../models/user.model';
+import { MOCK_EXISTING_USERS } from './mock-data';
 
 /**
  * In-memory "database" behind the mock API. Data is lost on page reload.
- * One account is seeded so the conflict case can be tried from the UI.
+ * It starts with the fictitious accounts of mock-data.ts.
  */
 @Injectable({ providedIn: 'root' })
 export class MockUserStore {
-  private readonly users: RegisteredUser[] = [
-    {
-      id: 1,
-      login: 'demo',
-      lastName: 'Démo',
-      firstName: 'Compte',
-      email: 'demo@pollution-tracker.fr',
-      createdAt: '2026-01-01T00:00:00.000Z',
-    },
-  ];
+  private readonly users: RegisteredUser[] = MOCK_EXISTING_USERS.map((user) => ({ ...user }));
 
   /** Returns the name of the field already taken, if any (comparison is case-insensitive). */
   findConflict(request: SignUpRequest): 'login' | 'email' | null {

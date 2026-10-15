@@ -1,17 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { Pollution } from '../../models/pollution.model';
+import { SAMPLE_POLLUTION } from '../../testing/pollution.fixtures';
 import { PollutionForm } from './pollution-form';
 
-const VALID_VALUE = {
-  titre: 'Bidons abandonnés',
-  type: 'Chimique' as const,
-  description: 'Une dizaine de bidons près du canal.',
-  dateObservation: '2024-05-12',
-  lieu: 'Lille',
-  latitude: 50.6292,
-  longitude: 3.0573,
-  photoUrl: '',
-};
+// Form value = sample declaration + the optional photo field left empty.
+const VALID_VALUE = { ...SAMPLE_POLLUTION, photoUrl: '' };
 
 describe('PollutionForm', () => {
   function create() {
@@ -68,10 +61,10 @@ describe('PollutionForm', () => {
     const fixture = create();
     let emitted: Pollution | undefined;
     fixture.componentInstance.declared.subscribe((p) => (emitted = p));
-    fixture.componentInstance.form.setValue({ ...VALID_VALUE, titre: '  Bidons  ' });
+    fixture.componentInstance.form.setValue({ ...VALID_VALUE, titre: `  ${VALID_VALUE.titre}  ` });
     (fixture.nativeElement as HTMLElement)
       .querySelector('form')!
       .dispatchEvent(new Event('submit'));
-    expect(emitted).toEqual({ ...VALID_VALUE, titre: 'Bidons', photoUrl: undefined });
+    expect(emitted).toEqual(SAMPLE_POLLUTION);
   });
 });

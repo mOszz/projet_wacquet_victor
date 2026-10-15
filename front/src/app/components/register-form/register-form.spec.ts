@@ -3,16 +3,8 @@ import { Subject } from 'rxjs';
 import { RegisteredUser, User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { SignUpError } from '../../services/sign-up-error';
+import { JOHN_DOE_FORM, JOHN_DOE_REGISTERED } from '../../testing/user.fixtures';
 import { RegisterForm } from './register-form';
-
-const CREATED: RegisteredUser = {
-  id: 2,
-  login: 'victor',
-  lastName: 'Wacquet',
-  firstName: 'Victor',
-  email: 'victor@example.com',
-  createdAt: '2026-10-15T10:00:00.000Z',
-};
 
 describe('RegisterForm', () => {
   let fixture: ComponentFixture<RegisterForm>;
@@ -32,26 +24,23 @@ describe('RegisterForm', () => {
     await fixture.whenStable();
   });
 
-  async function type(id: string, value: string) {
+  async function type(id: keyof User, value: string) {
     const input = el.querySelector<HTMLInputElement>(`#${id}`)!;
     input.value = value;
     input.dispatchEvent(new Event('input'));
     await fixture.whenStable();
   }
 
-  async function submit() {
-    el.querySelector('form')!.dispatchEvent(new Event('submit'));
-    fixture.detectChanges();
-    await fixture.whenStable();
+  /** Types every field of `user` in the form, as a person would. */
+  async function fill(user: User) {
+    for (const field of Object.keys(user) as (keyof User)[]) {
+      await type(field, user[field]);
+    }
   }
 
-  async function fillValid(confirmation = 'motdepasse') {
-    await type('login', 'victor');
-    await type('password', 'motdepasse');
-    await type('passwordConfirmation', confirmation);
-    await type('lastName', 'Wacquet');
-    await type('firstName', 'Victor');
-    await type('email', 'victor@example.com');
+  async function submit() {
+    el.querySelector('form')!.dispatchEvent(new Event('submit'));
+    await settle();
   }
 
   async function settle() {
@@ -66,14 +55,14 @@ describe('RegisterForm', () => {
   });
 
   it('should reject mismatching passwords without calling the service', async () => {
-    await fillValid('autrechose');
+    await fill({ ...JOHN_DOE_FORM, passwordConfirmation: 'SomethingElse' });
     await submit();
     expect(el.textContent).toContain('Les mots de passe ne correspondent pas.');
     expect(signUp).not.toHaveBeenCalled();
   });
 
   it('should disable the form while the request is pending and ignore re-submits', async () => {
-    await fillValid();
+    await fill(JOHN_DOE_FORM);
     await submit();
     await submit();
     expect(signUp).toHaveBeenCalledTimes(1);
@@ -82,18 +71,20 @@ describe('RegisterForm', () => {
   });
 
   it('should display the API result and clear the form on success', async () => {
-    await fillValid();
+    await fill(JOHN_DOE_FORM);
     await submit();
-    response.next(CREATED);
+    response.next(JOHN_DOE_REGISTERED);
     response.complete();
     await settle();
-    expect(el.querySelector('app-register-result')?.textContent).toContain('Bienvenue, Victor');
+    expect(el.querySelector('app-register-result')?.textContent).toContain(
+      `Bienvenue, ${JOHN_DOE_REGISTERED.firstName}`,
+    );
     expect(el.querySelector<HTMLInputElement>('#login')!.value).toBe('');
     expect(el.querySelector('fieldset')!.disabled).toBe(false);
   });
 
-  it('should display the error message on failure and allow a retry', async () => {
-    await fillValid();
+  it('should display the error message on failure and keep the input for a retry', async () => {
+    await fill(JOHN_DOE_FORM);
     await submit();
     response.error(new SignUpError('conflict', 'Cet identifiant est déjà utilisé.'));
     await settle();
@@ -101,12 +92,12 @@ describe('RegisterForm', () => {
       'Cet identifiant est déjà utilisé.',
     );
     expect(el.querySelector('app-register-result')).toBeNull();
-    expect(el.querySelector<HTMLInputElement>('#login')!.value).toBe('victor');
+    expect(el.querySelector<HTMLInputElement>('#login')!.value).toBe(JOHN_DOE_FORM.login);
     expect(el.querySelector('fieldset')!.disabled).toBe(false);
   });
 
   it('should cancel the pending request on reset', async () => {
-    await fillValid();
+    await fill(JOHN_DOE_FORM);
     await submit();
     el.querySelector<HTMLButtonElement>('button[type=button]')!.click();
     await settle();
