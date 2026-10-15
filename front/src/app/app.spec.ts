@@ -20,4 +20,14 @@ describe('App', () => {
     expect(compiled.querySelector('app-pollution-form')).toBeTruthy();
     expect(compiled.querySelector('app-pollution-recap')).toBeNull();
   });
+
+  it('should switch to the register form', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    compiled.querySelectorAll<HTMLButtonElement>('.tab')[1].click();
+    await fixture.whenStable();
+    expect(compiled.querySelector('app-register-form')).toBeTruthy();
+    expect(compiled.querySelector('app-pollution-form')).toBeNull();
+  });
 });

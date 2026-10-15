@@ -1,0 +1,170 @@
+<form class="panel" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" novalidate>
+  <div class="panel-title">
+    <span>Créer un compte</span>
+    <span class="panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+  </div>
+
+  <div class="grid">
+    <div class="field full">
+      <label for="login">Identifiant <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="login"
+        name="login"
+        type="text"
+        autocomplete="username"
+        [(ngModel)]="user.login"
+        #login="ngModel"
+        required
+        [minlength]="loginMinLength"
+        [attr.aria-invalid]="login.invalid && (login.touched || registerForm.submitted)"
+        aria-describedby="login-error"
+      />
+      @if (login.invalid && (login.touched || registerForm.submitted)) {
+        <p class="error" id="login-error">
+          @if (login.hasError('required')) {
+            L'identifiant est obligatoire.
+          } @else if (login.hasError('minlength')) {
+            L'identifiant doit contenir au moins {{ loginMinLength }} caractères.
+          }
+        </p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Mot de passe <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="new-password"
+        [(ngModel)]="user.password"
+        #password="ngModel"
+        required
+        [minlength]="passwordMinLength"
+        [attr.aria-invalid]="password.invalid && (password.touched || registerForm.submitted)"
+        aria-describedby="password-error"
+      />
+      @if (password.invalid && (password.touched || registerForm.submitted)) {
+        <p class="error" id="password-error">
+          @if (password.hasError('required')) {
+            Le mot de passe est obligatoire.
+          } @else if (password.hasError('minlength')) {
+            Le mot de passe doit contenir au moins {{ passwordMinLength }} caractères.
+          }
+        </p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="passwordConfirmation"> Confirmation <abbr title="obligatoire">*</abbr> </label>
+      <input
+        id="passwordConfirmation"
+        name="passwordConfirmation"
+        type="password"
+        autocomplete="new-password"
+        [(ngModel)]="user.passwordConfirmation"
+        #passwordConfirmation="ngModel"
+        required
+        [appPasswordMatch]="user.password"
+        [attr.aria-invalid]="
+          passwordConfirmation.invalid && (passwordConfirmation.touched || registerForm.submitted)
+        "
+        aria-describedby="passwordConfirmation-error"
+      />
+      @if (
+        passwordConfirmation.invalid && (passwordConfirmation.touched || registerForm.submitted)
+      ) {
+        <p class="error" id="passwordConfirmation-error">
+          @if (passwordConfirmation.hasError('required')) {
+            Veuillez confirmer le mot de passe.
+          } @else if (passwordConfirmation.hasError('passwordMismatch')) {
+            Les mots de passe ne correspondent pas.
+          }
+        </p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="lastName">Nom <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="lastName"
+        name="lastName"
+        type="text"
+        autocomplete="family-name"
+        [(ngModel)]="user.lastName"
+        #lastName="ngModel"
+        required
+        [attr.aria-invalid]="lastName.invalid && (lastName.touched || registerForm.submitted)"
+        aria-describedby="lastName-error"
+      />
+      @if (lastName.invalid && (lastName.touched || registerForm.submitted)) {
+        <p class="error" id="lastName-error">Le nom est obligatoire.</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="firstName">Prénom <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="firstName"
+        name="firstName"
+        type="text"
+        autocomplete="given-name"
+        [(ngModel)]="user.firstName"
+        #firstName="ngModel"
+        required
+        [attr.aria-invalid]="firstName.invalid && (firstName.touched || registerForm.submitted)"
+        aria-describedby="firstName-error"
+      />
+      @if (firstName.invalid && (firstName.touched || registerForm.submitted)) {
+        <p class="error" id="firstName-error">Le prénom est obligatoire.</p>
+      }
+    </div>
+
+    <div class="field full">
+      <label for="email">E-mail <abbr title="obligatoire">*</abbr></label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        [(ngModel)]="user.email"
+        #email="ngModel"
+        required
+        email
+        [attr.aria-invalid]="email.invalid && (email.touched || registerForm.submitted)"
+        aria-describedby="email-error"
+      />
+      @if (email.invalid && (email.touched || registerForm.submitted)) {
+        <p class="error" id="email-error">
+          @if (email.hasError('required')) {
+            L'e-mail est obligatoire.
+          } @else if (email.hasError('email')) {
+            Veuillez saisir une adresse e-mail valide.
+          }
+        </p>
+      }
+    </div>
+  </div>
+
+  @if (registeredUser(); as registered) {
+    <aside class="success" role="status">
+      <h2>Bienvenue, {{ registered.firstName }} !</h2>
+      <dl>
+        <dt>Identifiant</dt>
+        <dd>{{ registered.login }}</dd>
+        <dt>Nom</dt>
+        <dd>{{ registered.firstName }} {{ registered.lastName }}</dd>
+        <dt>E-mail</dt>
+        <dd>{{ registered.email }}</dd>
+      </dl>
+    </aside>
+  }
+
+  <div class="actions">
+    <p class="hint"><abbr title="obligatoire">*</abbr> Champs obligatoires</p>
+    <div class="buttons">
+      <button type="button" class="btn" (click)="onReset(registerForm)">Réinitialiser</button>
+      <button type="submit" class="btn btn-primary">S'inscrire</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,45 @@
+<header class="site-header">
+  <div class="container">
+    <p class="kicker"><span aria-hidden="true">♻</span> pollution_tracker</p>
+    <h1>{{ headings[view()].title }}</h1>
+    <p class="lead">{{ headings[view()].lead }}</p>
+
+    <nav class="tabs" aria-label="Sections">
+      <button
+        type="button"
+        class="tab"
+        [attr.aria-current]="view() === 'pollution' ? 'page' : null"
+        (click)="view.set('pollution')"
+      >
+        Déclarer une pollution
+      </button>
+      <button
+        type="button"
+        class="tab"
+        [attr.aria-current]="view() === 'register' ? 'page' : null"
+        (click)="view.set('register')"
+      >
+        Créer un compte
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  @switch (view()) {
+    @case ('pollution') {
+      @if (declaration(); as pollution) {
+        <app-pollution-recap [pollution]="pollution" (newDeclaration)="onNewDeclaration()" />
+      } @else {
+        <app-pollution-form (declared)="onDeclared($event)" />
+      }
+    }
+    @case ('register') {
+      <app-register-form />
+    }
+  }
+</main>
+
+<footer class="site-footer">
+  <div class="container">♻ Pollution Tracker · Ensemble, protégeons notre environnement</div>
+</footer>
