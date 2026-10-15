@@ -4,7 +4,9 @@
     <span class="panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
   </div>
 
-  <div class="grid">
+  <fieldset class="grid" [disabled]="pending()">
+    <legend class="visually-hidden">Informations du compte</legend>
+
     <div class="field full">
       <label for="login">Identifiant <abbr title="obligatoire">*</abbr></label>
       <input
@@ -144,27 +146,30 @@
         </p>
       }
     </div>
-  </div>
+  </fieldset>
+
+  @if (errorMessage(); as message) {
+    <p class="alert" role="alert">{{ message }}</p>
+  }
 
   @if (registeredUser(); as registered) {
-    <aside class="success" role="status">
-      <h2>Bienvenue, {{ registered.firstName }} !</h2>
-      <dl>
-        <dt>Identifiant</dt>
-        <dd>{{ registered.login }}</dd>
-        <dt>Nom</dt>
-        <dd>{{ registered.firstName }} {{ registered.lastName }}</dd>
-        <dt>E-mail</dt>
-        <dd>{{ registered.email }}</dd>
-      </dl>
-    </aside>
+    <div class="result">
+      <app-register-result [user]="registered" />
+    </div>
   }
 
   <div class="actions">
     <p class="hint"><abbr title="obligatoire">*</abbr> Champs obligatoires</p>
     <div class="buttons">
       <button type="button" class="btn" (click)="onReset(registerForm)">Réinitialiser</button>
-      <button type="submit" class="btn btn-primary">S'inscrire</button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="pending()"
+        [attr.aria-busy]="pending()"
+      >
+        {{ pending() ? 'Inscription…' : "S'inscrire" }}
+      </button>
     </div>
   </div>
 </form>
