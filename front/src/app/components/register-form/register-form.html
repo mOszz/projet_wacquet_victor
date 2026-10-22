@@ -146,10 +146,16 @@
     </div>
   </div>
 
+  @if (errorMessage(); as message) {
+    <p class="alert" role="alert">{{ message }}</p>
+  }
+
   @if (registeredUser(); as registered) {
     <aside class="success" role="status">
       <h2>Bienvenue, {{ registered.firstName }} !</h2>
       <dl>
+        <dt>N° de compte</dt>
+        <dd>{{ registered.id }}</dd>
         <dt>Identifiant</dt>
         <dd>{{ registered.login }}</dd>
         <dt>Nom</dt>
@@ -164,7 +170,9 @@
     <p class="hint"><abbr title="obligatoire">*</abbr> Champs obligatoires</p>
     <div class="buttons">
       <button type="button" class="btn" (click)="onReset(registerForm)">Réinitialiser</button>
-      <button type="submit" class="btn btn-primary">S'inscrire</button>
+      <button type="submit" class="btn btn-primary" [disabled]="pending()">
+        {{ pending() ? 'Inscription…' : "S'inscrire" }}
+      </button>
     </div>
   </div>
 </form>
