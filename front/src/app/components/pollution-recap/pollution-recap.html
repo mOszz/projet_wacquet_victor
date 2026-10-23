@@ -1,10 +1,8 @@
 <article class="panel" aria-labelledby="recap-title">
   <div class="panel-title panel-title-strong">
     <span>
-      Déclaration enregistrée
-      @if (pollution.id) {
-        <span class="mono">n° {{ pollution.id }}</span>
-      }
+      {{ heading }}
+      <span class="mono">n° {{ pollution.id }}</span>
     </span>
     <span class="panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
   </div>
@@ -62,7 +60,8 @@
     }
   </div>
 
+  <!-- Buttons are provided by the parent page (new declaration, edit, delete...). -->
   <div class="actions">
-    <button type="button" class="btn" (click)="newDeclaration.emit()">Nouvelle déclaration</button>
+    <ng-content />
   </div>
 </article>

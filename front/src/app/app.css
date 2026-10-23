@@ -61,6 +61,7 @@ h1 {
 
 .tab {
   padding: 0.45rem 0.9rem;
+  text-decoration: none;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   font-weight: 700;

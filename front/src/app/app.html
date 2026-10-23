@@ -1,43 +1,31 @@
 <header class="site-header">
   <div class="container">
     <p class="kicker"><span aria-hidden="true">♻</span> pollution_tracker</p>
-    <h1>{{ headings[view()].title }}</h1>
-    <p class="lead">{{ headings[view()].lead }}</p>
+    <h1>Pollution Tracker</h1>
+    <p class="lead">Signalez et suivez les pollutions repérées près de chez vous.</p>
 
     <nav class="tabs" aria-label="Sections">
-      <button
-        type="button"
+      <a
         class="tab"
-        [attr.aria-current]="view() === 'pollution' ? 'page' : null"
-        (click)="view.set('pollution')"
+        routerLink="/pollutions"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
       >
+        Pollutions
+      </a>
+      <a class="tab" routerLink="/pollutions/new" routerLinkActive ariaCurrentWhenActive="page">
         Déclarer une pollution
-      </button>
-      <button
-        type="button"
-        class="tab"
-        [attr.aria-current]="view() === 'register' ? 'page' : null"
-        (click)="view.set('register')"
-      >
+      </a>
+      <a class="tab" routerLink="/register" routerLinkActive ariaCurrentWhenActive="page">
         Créer un compte
-      </button>
+      </a>
     </nav>
   </div>
 </header>
 
 <main class="container">
-  @switch (view()) {
-    @case ('pollution') {
-      @if (declaration(); as pollution) {
-        <app-pollution-recap [pollution]="pollution" (newDeclaration)="onNewDeclaration()" />
-      } @else {
-        <app-pollution-form (declared)="onDeclared($event)" />
-      }
-    }
-    @case ('register') {
-      <app-register-form />
-    }
-  }
+  <router-outlet />
 </main>
 
 <footer class="site-footer">

@@ -1,15 +1,6 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
-import { Pollution, PollutionType } from '../../models/pollution.model';
-
-const TYPE_CLASSES: Record<PollutionType, string> = {
-  Plastique: 'tag-plastique',
-  Chimique: 'tag-chimique',
-  'Dépôt sauvage': 'tag-depot',
-  Eau: 'tag-eau',
-  Air: 'tag-air',
-  Autre: 'tag-autre',
-};
+import { Component, Input, signal } from '@angular/core';
+import { POLLUTION_TYPE_TAGS, Pollution } from '../../models/pollution.model';
 
 @Component({
   selector: 'app-pollution-recap',
@@ -19,12 +10,12 @@ const TYPE_CLASSES: Record<PollutionType, string> = {
 })
 export class PollutionRecap {
   @Input({ required: true }) pollution!: Pollution;
-  @Output() readonly newDeclaration = new EventEmitter<void>();
+  @Input() heading = 'Déclaration enregistrée';
 
   protected readonly photoFailed = signal(false);
 
   protected get typeClass(): string {
-    return TYPE_CLASSES[this.pollution.type];
+    return POLLUTION_TYPE_TAGS[this.pollution.type];
   }
 
   protected get mapUrl(): string {
