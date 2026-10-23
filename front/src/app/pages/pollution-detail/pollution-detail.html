@@ -1,0 +1,21 @@
+<div class="page-head">
+  <h2>Détail de la pollution</h2>
+  <a class="btn" routerLink="/pollutions">← Retour à la liste</a>
+</div>
+
+@if (pollution.isLoading()) {
+  <p class="notice" role="status">Chargement…</p>
+} @else if (pollution.error()) {
+  <p class="notice notice-error" role="alert">Cette pollution est introuvable ou indisponible.</p>
+} @else if (pollution.value(); as p) {
+  @if (deleteError(); as message) {
+    <p class="notice notice-error" role="alert">{{ message }}</p>
+  }
+
+  <app-pollution-recap [pollution]="p" heading="Déclaration">
+    <a class="btn" [routerLink]="['/pollutions', p.id, 'edit']">Modifier</a>
+    <button type="button" class="btn btn-danger" [disabled]="deleting()" (click)="remove(p)">
+      {{ deleting() ? 'Suppression…' : 'Supprimer' }}
+    </button>
+  </app-pollution-recap>
+}

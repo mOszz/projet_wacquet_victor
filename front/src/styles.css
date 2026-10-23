@@ -286,12 +286,69 @@ abbr[title] {
   box-shadow: 1px 1px 0 var(--ink);
 }
 
-.btn-primary {
+.btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Links styled as buttons keep the button look on hover. */
+a.btn {
+  text-decoration: none;
+}
+
+a.btn:hover {
+  background: var(--surface);
+}
+
+.btn-primary,
+a.btn-primary:hover {
   background: var(--accent);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: var(--leaf-400);
+}
+
+.btn-danger {
+  background: var(--nature-clay);
+}
+
+/* ---------- En-tête de page et messages ---------- */
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.page-head h2 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+}
+
+.notice {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+.notice-error {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+
+.notice .btn {
+  margin-left: 0.75rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
 }
 
 /* ---------- Étiquettes de type ---------- */

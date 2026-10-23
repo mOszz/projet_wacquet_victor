@@ -1,0 +1,21 @@
+<div class="page-head">
+  <h2>Déclarer une pollution</h2>
+  <a class="btn" routerLink="/pollutions">← Retour à la liste</a>
+</div>
+
+@if (created(); as pollution) {
+  <app-pollution-recap [pollution]="pollution">
+    <a class="btn" routerLink="/pollutions">Voir la liste</a>
+    <button type="button" class="btn btn-primary" (click)="created.set(null)">
+      Nouvelle déclaration
+    </button>
+  </app-pollution-recap>
+} @else {
+  @if (error(); as message) {
+    <p class="notice notice-error" role="alert">{{ message }}</p>
+  }
+  @if (saving()) {
+    <p class="notice" role="status">Enregistrement…</p>
+  }
+  <app-pollution-form (declared)="onDeclared($event)" />
+}

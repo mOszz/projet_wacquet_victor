@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { POLLUTION_TYPES, Pollution, PollutionType } from '../../models/pollution.model';
+import { POLLUTION_TYPES, PollutionInput, PollutionType } from '../../models/pollution.model';
 import {
   finiteNumber,
   notBlank,
@@ -27,7 +27,17 @@ const ERROR_MESSAGES: Record<string, string> = {
   styleUrl: './pollution-form.css',
 })
 export class PollutionForm {
-  @Output() readonly declared = new EventEmitter<Pollution>();
+  @Input() heading = 'Nouvelle déclaration';
+  @Input() submitLabel = 'Déclarer';
+
+  /** Pre-fills the form, e.g. to edit an existing pollution. */
+  @Input() set pollution(value: PollutionInput | null) {
+    if (value) {
+      this.form.patchValue({ ...value, photoUrl: value.photoUrl ?? '' });
+    }
+  }
+
+  @Output() readonly declared = new EventEmitter<PollutionInput>();
 
   private readonly fb = inject(FormBuilder);
 
