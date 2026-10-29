@@ -1,0 +1,23 @@
+<div class="page-head">
+  <h2>Modifier la pollution</h2>
+  <a class="btn" [routerLink]="['/pollutions', id()]">Annuler</a>
+</div>
+
+@if (pollution.isLoading()) {
+  <p class="notice" role="status">Chargement…</p>
+} @else if (pollution.error()) {
+  <p class="notice notice-error" role="alert">Cette pollution est introuvable ou indisponible.</p>
+} @else if (pollution.value(); as p) {
+  @if (error(); as message) {
+    <p class="notice notice-error" role="alert">{{ message }}</p>
+  }
+  @if (saving()) {
+    <p class="notice" role="status">Enregistrement…</p>
+  }
+  <app-pollution-form
+    [pollution]="p"
+    heading="Modification"
+    submitLabel="Enregistrer"
+    (declared)="onSubmit($event)"
+  />
+}

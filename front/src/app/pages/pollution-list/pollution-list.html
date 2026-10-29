@@ -1,0 +1,93 @@
+<div class="page-head">
+  <h2>Pollutions déclarées</h2>
+  <a class="btn btn-primary" routerLink="/pollutions/new">+ Déclarer une pollution</a>
+</div>
+
+<section class="panel filters" aria-label="Filtres">
+  <div class="field search">
+    <label for="filter-search">Recherche</label>
+    <input
+      id="filter-search"
+      type="search"
+      placeholder="Titre, lieu, description…"
+      [(ngModel)]="search"
+    />
+  </div>
+  <div class="field">
+    <label for="filter-type">Type</label>
+    <select id="filter-type" [(ngModel)]="type">
+      <option value="">Tous les types</option>
+      @for (t of types; track t) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+  </div>
+  <div class="field">
+    <label for="filter-from">Observée du</label>
+    <input id="filter-from" type="date" [(ngModel)]="from" [max]="to() || null" />
+  </div>
+  <div class="field">
+    <label for="filter-to">au</label>
+    <input id="filter-to" type="date" [(ngModel)]="to" [min]="from() || null" />
+  </div>
+  <button type="button" class="btn reset" [disabled]="!hasFilters()" (click)="resetFilters()">
+    Effacer
+  </button>
+</section>
+
+@if (deleteError(); as message) {
+  <p class="notice notice-error" role="alert">{{ message }}</p>
+}
+
+@if (pollutions.isLoading()) {
+  <p class="notice" role="status">Chargement des pollutions…</p>
+} @else if (pollutions.error()) {
+  <p class="notice notice-error" role="alert">
+    Impossible de charger les pollutions.
+    <button type="button" class="btn" (click)="pollutions.reload()">Réessayer</button>
+  </p>
+} @else {
+  <p class="count" role="status">
+    {{ filtered().length }} pollution{{ filtered().length > 1 ? 's' : '' }}
+    @if (hasFilters()) {
+      sur {{ pollutions.value().length }}
+    }
+  </p>
+
+  @if (filtered().length) {
+    <ul class="list">
+      @for (pollution of filtered(); track pollution.id) {
+        <li class="panel item">
+          <div class="item-main">
+            <span class="tag" [class]="typeTags[pollution.type]">{{ pollution.type }}</span>
+            <h3>
+              <a [routerLink]="['/pollutions', pollution.id]">{{ pollution.titre }}</a>
+            </h3>
+            <p class="meta">
+              {{ pollution.dateObservation | date: 'longDate' }} · {{ pollution.lieu }}
+            </p>
+          </div>
+          <div class="item-actions">
+            <a class="btn" [routerLink]="['/pollutions', pollution.id]">Détail</a>
+            <button
+              type="button"
+              class="btn btn-danger"
+              [disabled]="deletingId() === pollution.id"
+              (click)="remove(pollution)"
+            >
+              {{ deletingId() === pollution.id ? 'Suppression…' : 'Supprimer' }}
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="notice">
+      @if (hasFilters()) {
+        Aucune pollution ne correspond à ces filtres.
+      } @else {
+        Aucune pollution déclarée pour le moment.
+      }
+    </p>
+  }
+}
