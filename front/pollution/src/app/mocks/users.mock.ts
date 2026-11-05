@@ -7,8 +7,11 @@ import { mockError, mockResponse } from './mock-http';
 const users: RegisteredUser[] = [];
 let nextId = 1;
 
-/** Fake `/users` endpoint: only sign-up (POST) is supported. */
+/** Fake `/users` endpoint: list (GET) and sign-up (POST). */
 export function handleUsers(req: HttpRequest<unknown>): Observable<HttpEvent<unknown>> | null {
+  if (req.method === 'GET') {
+    return mockResponse(structuredClone(users));
+  }
   if (req.method !== 'POST') {
     return null;
   }
