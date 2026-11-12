@@ -20,7 +20,8 @@ const db = {
 
 /** Creates the tables if they do not exist, and fills `pollution` when it is empty. */
 export async function initDatabase(): Promise<void> {
-  await sequelize.sync();
+  // `alter` adds new columns (e.g. indice_dangerosite) to tables that already exist on Render.
+  await sequelize.sync({ alter: true });
 
   if ((await db.pollutions.count()) === 0) {
     // Sample data (fictitious), so the API returns something right after deployment.
@@ -33,6 +34,7 @@ export async function initDatabase(): Promise<void> {
         lieu: 'Plage de test, Zone A',
         latitude: 43.2965,
         longitude: 5.3698,
+        indiceDangerosite: 15,
       },
       {
         titre: 'Fûts abandonnés en bord de rivière',
@@ -42,6 +44,7 @@ export async function initDatabase(): Promise<void> {
         lieu: 'Berges de test, Zone B',
         latitude: 45.764,
         longitude: 4.8357,
+        indiceDangerosite: 120,
       },
       {
         titre: 'Gravats dans un chemin forestier',
@@ -51,6 +54,7 @@ export async function initDatabase(): Promise<void> {
         lieu: 'Forêt de test, Zone C',
         latitude: 48.8566,
         longitude: 2.3522,
+        indiceDangerosite: 45,
       },
     ]);
   }

@@ -75,6 +75,11 @@ export class PollutionForm {
       Validators.min(-180),
       Validators.max(180),
     ]),
+    indiceDangerosite: this.fb.control<number | null>(null, [
+      Validators.required,
+      finiteNumber,
+      Validators.min(0),
+    ]),
     photoUrl: this.fb.nonNullable.control('', optionalHttpUrl),
   });
 
@@ -87,6 +92,9 @@ export class PollutionForm {
     const errors = this.form.controls[field].errors;
     if (!errors) {
       return '';
+    }
+    if (field === 'indiceDangerosite' && errors['min']) {
+      return "L'indice ne peut pas être négatif.";
     }
     if (errors['min'] || errors['max']) {
       const { min, max } = field === 'latitude' ? { min: -90, max: 90 } : { min: -180, max: 180 };
@@ -113,6 +121,7 @@ export class PollutionForm {
       lieu: value.lieu.trim(),
       latitude: value.latitude!,
       longitude: value.longitude!,
+      indiceDangerosite: value.indiceDangerosite!,
       ...(photoUrl && { photoUrl }),
     });
   }

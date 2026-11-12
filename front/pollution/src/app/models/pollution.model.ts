@@ -30,6 +30,8 @@ export interface Pollution {
   lieu: string;
   latitude: number;
   longitude: number;
+  /** Danger index (0 or more), displayed as a level by PollutionLevelPipe. */
+  indiceDangerosite: number;
   photoUrl?: string;
 }
 

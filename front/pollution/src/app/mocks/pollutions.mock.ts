@@ -15,6 +15,7 @@ const pollutions: Pollution[] = [
     lieu: 'Plage de test, Zone A',
     latitude: 43.2965,
     longitude: 5.3698,
+    indiceDangerosite: 15,
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ const pollutions: Pollution[] = [
     lieu: 'Berges de test, Zone B',
     latitude: 45.764,
     longitude: 4.8357,
+    indiceDangerosite: 120,
   },
   {
     id: 3,
@@ -35,6 +37,7 @@ const pollutions: Pollution[] = [
     lieu: 'Forêt de test, Zone C',
     latitude: 48.8566,
     longitude: 2.3522,
+    indiceDangerosite: 45,
   },
 ];
 let nextId = pollutions.length + 1;
