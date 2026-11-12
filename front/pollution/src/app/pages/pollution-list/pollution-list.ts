@@ -9,11 +9,13 @@ import {
   Pollution,
   PollutionType,
 } from '../../models/pollution.model';
+import { HighlightPollutionDirective } from '../../directives/highlight-pollution.directive';
+import { PollutionLevelPipe } from '../../pipes/pollution-level.pipe';
 import { PollutionService } from '../../services/pollution.service';
 
 @Component({
   selector: 'app-pollution-list',
-  imports: [DatePipe, FormsModule, RouterLink],
+  imports: [DatePipe, FormsModule, RouterLink, PollutionLevelPipe, HighlightPollutionDirective],
   templateUrl: './pollution-list.html',
   styleUrl: './pollution-list.css',
 })

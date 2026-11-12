@@ -120,6 +120,25 @@
     </div>
 
     <div class="field full">
+      <label for="indiceDangerosite">
+        Indice de dangerosité <abbr title="obligatoire">*</abbr>
+      </label>
+      <input
+        id="indiceDangerosite"
+        type="number"
+        step="1"
+        min="0"
+        formControlName="indiceDangerosite"
+        placeholder="Ex. : 35 (0-20 faible, 21-50 modérée, 51-100 élevée, 101+ dangereuse)"
+        [attr.aria-invalid]="showError('indiceDangerosite')"
+        aria-describedby="indiceDangerosite-error"
+      />
+      @if (showError('indiceDangerosite')) {
+        <p class="error" id="indiceDangerosite-error">{{ errorMessage('indiceDangerosite') }}</p>
+      }
+    </div>
+
+    <div class="field full">
       <label for="photoUrl">Photo (URL) <span class="optional">optionnel</span></label>
       <input
         id="photoUrl"

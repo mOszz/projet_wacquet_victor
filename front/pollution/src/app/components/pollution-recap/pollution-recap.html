@@ -31,6 +31,13 @@
           <dt>Longitude</dt>
           <dd class="mono">{{ pollution.longitude | number: '1.0-6' }}</dd>
         </div>
+        <div class="wide" [appHighlightPollution]="pollution.indiceDangerosite">
+          <dt>Niveau de pollution</dt>
+          <dd>
+            {{ pollution.indiceDangerosite | pollutionLevel }}
+            <span class="mono">(indice {{ pollution.indiceDangerosite }})</span>
+          </dd>
+        </div>
         <div class="wide">
           <dt>Description</dt>
           <dd class="description">{{ pollution.description }}</dd>

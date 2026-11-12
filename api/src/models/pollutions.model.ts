@@ -13,6 +13,7 @@ export interface PollutionAttributes {
   lieu: string;
   latitude: number;
   longitude: number;
+  indiceDangerosite: number;
   photoUrl: string | null;
 }
 
@@ -38,6 +39,13 @@ export default function definePollutions(sequelize: Sequelize): PollutionModel {
       lieu: { type: DataTypes.STRING, allowNull: false, validate: { notEmpty: true } },
       latitude: { type: DataTypes.DOUBLE, allowNull: false, validate: { min: -90, max: 90 } },
       longitude: { type: DataTypes.DOUBLE, allowNull: false, validate: { min: -180, max: 180 } },
+      // Danger index: 0-20 Faible, 21-50 Modérée, 51-100 Élevée, 101+ Dangereuse (computed by the front).
+      indiceDangerosite: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: { min: 0 },
+      },
       photoUrl: { type: DataTypes.STRING, allowNull: true, validate: { isUrl: true } },
     },
     {

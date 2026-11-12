@@ -8,7 +8,17 @@ type IdParams = { id: string };
 
 /** Keeps only the editable fields: the id comes from the URL or the database, never from the body. */
 function toPollutionData(body: Partial<PollutionCreationAttributes> = {}): PollutionCreationAttributes {
-  const { titre, type, description, dateObservation, lieu, latitude, longitude, photoUrl } = body;
+  const {
+    titre,
+    type,
+    description,
+    dateObservation,
+    lieu,
+    latitude,
+    longitude,
+    indiceDangerosite,
+    photoUrl,
+  } = body;
   // Missing required fields are left undefined and rejected by the model validation (400).
   return {
     titre,
@@ -18,6 +28,7 @@ function toPollutionData(body: Partial<PollutionCreationAttributes> = {}): Pollu
     lieu,
     latitude,
     longitude,
+    indiceDangerosite,
     photoUrl: photoUrl || null,
   } as PollutionCreationAttributes;
 }

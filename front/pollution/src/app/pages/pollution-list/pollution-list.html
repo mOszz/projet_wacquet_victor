@@ -60,6 +60,9 @@
         <li class="panel item">
           <div class="item-main">
             <span class="tag" [class]="typeTags[pollution.type]">{{ pollution.type }}</span>
+            <span class="tag" [appHighlightPollution]="pollution.indiceDangerosite">
+              {{ pollution.indiceDangerosite | pollutionLevel }}
+            </span>
             <h3>
               <a [routerLink]="['/pollutions', pollution.id]">{{ pollution.titre }}</a>
             </h3>
