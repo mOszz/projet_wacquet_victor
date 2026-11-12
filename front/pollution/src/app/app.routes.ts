@@ -29,6 +29,11 @@ export const routes: Routes = [
       import('./pages/pollution-edit/pollution-edit').then((m) => m.PollutionEdit),
   },
   {
+    path: 'users',
+    title: 'Utilisateurs · Pollution Tracker',
+    loadComponent: () => import('./pages/user-list/user-list').then((m) => m.UserList),
+  },
+  {
     path: 'register',
     title: 'Créer un compte · Pollution Tracker',
     loadComponent: () =>

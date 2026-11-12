@@ -4,14 +4,19 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { RegisteredUser, User } from '../models/user.model';
 
+/** Access to the users REST API (`{apiUrl}/users`). */
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class UserService {
   private readonly http = inject(HttpClient);
-  private readonly usersUrl = `${environment.apiUrl}/users`;
+  private readonly url = `${environment.apiUrl}/users`;
 
-  signUp(user: User): Observable<RegisteredUser> {
+  getAll(): Observable<RegisteredUser[]> {
+    return this.http.get<RegisteredUser[]>(this.url);
+  }
+
+  create(user: User): Observable<RegisteredUser> {
     // The password confirmation is only a form check: it is not sent to the API.
-    return this.http.post<RegisteredUser>(this.usersUrl, {
+    return this.http.post<RegisteredUser>(this.url, {
       login: user.login.trim(),
       password: user.password,
       lastName: user.lastName.trim(),

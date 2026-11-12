@@ -3,7 +3,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
 import { createEmptyUser, RegisteredUser, User } from '../../models/user.model';
-import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 import { PasswordMatch } from '../../validators/password-match.directive';
 
 @Component({
@@ -13,7 +13,7 @@ import { PasswordMatch } from '../../validators/password-match.directive';
   styleUrl: './register-form.css',
 })
 export class RegisterForm {
-  private readonly authService = inject(AuthService);
+  private readonly userService = inject(UserService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly loginMinLength = 3;
@@ -38,8 +38,8 @@ export class RegisterForm {
     this.errorMessage.set(null);
     this.registeredUser.set(null);
 
-    this.authService
-      .signUp(this.user)
+    this.userService
+      .create(this.user)
       // Stops listening if the component is destroyed (e.g. tab change) before the answer.
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
