@@ -1,0 +1,44 @@
+<form class="panel" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="panel-title">
+    <span>Connexion</span>
+    <span class="panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+  </div>
+
+  @if (returnUrl()) {
+    <p class="notice">Connectez-vous pour accéder à cette page.</p>
+  }
+
+  <div class="fields">
+    <div class="field">
+      <label for="login">Identifiant</label>
+      <input id="login" type="text" autocomplete="username" formControlName="login" />
+      @if (form.controls.login.invalid && form.controls.login.touched) {
+        <p class="error">L'identifiant est obligatoire.</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Mot de passe</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        formControlName="password"
+      />
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <p class="error">Le mot de passe est obligatoire.</p>
+      }
+    </div>
+
+    @if (error(); as message) {
+      <p class="notice notice-error" role="alert">{{ message }}</p>
+    }
+  </div>
+
+  <div class="actions">
+    <a routerLink="/register">Pas encore de compte ?</a>
+    <button type="submit" class="btn btn-primary" [disabled]="pending()">
+      {{ pending() ? 'Connexion…' : 'Se connecter' }}
+    </button>
+  </div>
+</form>
