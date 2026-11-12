@@ -20,9 +20,21 @@
       <a class="tab" routerLink="/users" routerLinkActive ariaCurrentWhenActive="page">
         Utilisateurs
       </a>
-      <a class="tab" routerLink="/register" routerLinkActive ariaCurrentWhenActive="page">
-        Créer un compte
-      </a>
+      @if (auth.currentUser(); as user) {
+        <span class="session">
+          Connecté : <strong>{{ user.login }}</strong>
+          <button type="button" class="tab" (click)="logout()">Déconnexion</button>
+        </span>
+      } @else {
+        <span class="session">
+          <a class="tab" routerLink="/login" routerLinkActive ariaCurrentWhenActive="page">
+            Connexion
+          </a>
+          <a class="tab" routerLink="/register" routerLinkActive ariaCurrentWhenActive="page">
+            Créer un compte
+          </a>
+        </span>
+      }
     </nav>
   </div>
 </header>

@@ -1,5 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 import { HighlightPollutionDirective } from '../../directives/highlight-pollution.directive';
 import { POLLUTION_TYPE_TAGS, Pollution } from '../../models/pollution.model';
 import { PollutionLevelPipe } from '../../pipes/pollution-level.pipe';
@@ -9,6 +9,7 @@ import { PollutionLevelPipe } from '../../pipes/pollution-level.pipe';
   imports: [DatePipe, DecimalPipe, PollutionLevelPipe, HighlightPollutionDirective],
   templateUrl: './pollution-recap.html',
   styleUrl: './pollution-recap.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PollutionRecap {
   @Input({ required: true }) pollution!: Pollution;

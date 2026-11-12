@@ -73,6 +73,16 @@ h1 {
   cursor: pointer;
 }
 
+.session {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
 .tab:hover {
   background: var(--leaf-100);
 }

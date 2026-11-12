@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -8,6 +8,7 @@ import { UserService } from '../../services/user.service';
   imports: [RouterLink],
   templateUrl: './user-list.html',
   styleUrl: './user-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserList {
   private readonly userService = inject(UserService);

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { POLLUTION_TYPES, PollutionInput, PollutionType } from '../../models/pollution.model';
 import {
@@ -25,6 +32,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   imports: [ReactiveFormsModule],
   templateUrl: './pollution-form.html',
   styleUrl: './pollution-form.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PollutionForm {
   @Input() heading = 'Nouvelle déclaration';

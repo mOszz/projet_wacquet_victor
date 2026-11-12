@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PollutionForm } from '../../components/pollution-form/pollution-form';
 import { PollutionRecap } from '../../components/pollution-recap/pollution-recap';
@@ -10,6 +10,7 @@ import { PollutionService } from '../../services/pollution.service';
   selector: 'app-pollution-create',
   imports: [PollutionForm, PollutionRecap, RouterLink],
   templateUrl: './pollution-create.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PollutionCreate {
   private readonly pollutionService = inject(PollutionService);

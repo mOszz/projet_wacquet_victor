@@ -1,0 +1,30 @@
+:host {
+  display: block;
+  max-width: 420px;
+  margin-inline: auto;
+}
+
+.fields {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.notice {
+  margin: 1.5rem 1.5rem 0;
+}
+
+.fields .notice {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 2px solid var(--line);
+  background: var(--muted-bar);
+}

@@ -1,41 +1,29 @@
 import { Routes } from '@angular/router';
+import { authGuard, guestGuard } from './guards/auth.guards';
 
-// Pages are lazy-loaded: each one is downloaded only when first visited.
+// Everything is lazy-loaded: code is downloaded only when a page is first visited.
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'pollutions' },
   {
     path: 'pollutions',
-    title: 'Pollutions · Pollution Tracker',
-    loadComponent: () =>
-      import('./pages/pollution-list/pollution-list').then((m) => m.PollutionList),
-  },
-  {
-    // Declared before ':id', otherwise "new" would be read as an id.
-    path: 'pollutions/new',
-    title: 'Déclarer une pollution · Pollution Tracker',
-    loadComponent: () =>
-      import('./pages/pollution-create/pollution-create').then((m) => m.PollutionCreate),
-  },
-  {
-    path: 'pollutions/:id',
-    title: 'Détail · Pollution Tracker',
-    loadComponent: () =>
-      import('./pages/pollution-detail/pollution-detail').then((m) => m.PollutionDetail),
-  },
-  {
-    path: 'pollutions/:id/edit',
-    title: 'Modifier · Pollution Tracker',
-    loadComponent: () =>
-      import('./pages/pollution-edit/pollution-edit').then((m) => m.PollutionEdit),
+    loadChildren: () => import('./pages/pollution.routes').then((m) => m.POLLUTION_ROUTES),
   },
   {
     path: 'users',
     title: 'Utilisateurs · Pollution Tracker',
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/user-list/user-list').then((m) => m.UserList),
+  },
+  {
+    path: 'login',
+    title: 'Connexion · Pollution Tracker',
+    canActivate: [guestGuard],
+    loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
   {
     path: 'register',
     title: 'Créer un compte · Pollution Tracker',
+    canActivate: [guestGuard],
     loadComponent: () =>
       import('./components/register-form/register-form').then((m) => m.RegisterForm),
   },
