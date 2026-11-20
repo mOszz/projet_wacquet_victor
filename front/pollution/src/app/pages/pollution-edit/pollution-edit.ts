@@ -1,8 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { PollutionForm } from '../../components/pollution-form/pollution-form';
-import { PollutionInput } from '../../models/pollution.model';
+import { PollutionFormValue } from '../../models/pollution.model';
 import { PollutionService } from '../../services/pollution.service';
 
 @Component({
@@ -26,17 +27,18 @@ export class PollutionEdit {
   protected readonly saving = signal(false);
   protected readonly error = signal<string | null>(null);
 
-  protected onSubmit(changes: PollutionInput): void {
+  protected onSubmit(value: PollutionFormValue): void {
     if (this.saving()) {
       return;
     }
     this.saving.set(true);
     this.error.set(null);
 
-    this.pollutionService.update(Number(this.id()), changes).subscribe({
+    this.pollutionService.update(Number(this.id()), value).subscribe({
       next: (updated) => this.router.navigate(['/pollutions', updated.id]),
-      error: () => {
-        this.error.set('La modification a échoué, réessayez.');
+      error: (error: HttpErrorResponse) => {
+        // The API explains rejected data (e.g. photo too large); otherwise a generic message.
+        this.error.set(error.error?.message ?? 'La modification a échoué, réessayez.');
         this.saving.set(false);
       },
     });

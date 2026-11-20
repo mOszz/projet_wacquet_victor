@@ -1,7 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
-const HTTP_URL = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
 
 /** Refuse une chaîne composée uniquement d'espaces (Validators.required l'accepte). */
 export const notBlank: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -43,10 +42,4 @@ export const validObservationDate: ValidatorFn = (
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   return date > today ? { futureDate: true } : null;
-};
-
-/** Champ optionnel : si renseigné, doit être une URL http(s). */
-export const optionalHttpUrl: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-  const value = typeof control.value === 'string' ? control.value.trim() : '';
-  return value === '' || HTTP_URL.test(value) ? null : { invalidUrl: true };
 };

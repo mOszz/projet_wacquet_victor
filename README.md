@@ -22,13 +22,19 @@ Au démarrage, les tables `pollution` et `users` sont créées si besoin, et `po
 | `GET /health` | État du service |
 | `POST /api/users` | Créer un utilisateur (mot de passe haché, jamais renvoyé) |
 | `GET /api/users` | Liste des utilisateurs |
+| `POST /api/login` | Connexion fictive (renvoie l'utilisateur, ou 401) |
 | `GET /api/pollutions` | Liste des pollutions |
 | `GET /api/pollutions/:id` | Détail d'une pollution |
+| `GET /api/pollutions/:id/photo` | Photo de la pollution (image stockée en base) |
 | `POST /api/pollutions` | Ajouter une pollution |
-| `PUT /api/pollutions/:id` | Modifier une pollution |
+| `PUT /api/pollutions/:id` | Modifier une pollution (`removePhoto: true` pour supprimer la photo) |
 | `DELETE /api/pollutions/:id` | Supprimer une pollution |
 
-Erreurs renvoyées en JSON (`{ "message": ... }`) : 400 données invalides, 404 introuvable, 409 identifiant ou e-mail déjà utilisé, 500 erreur serveur.
+`POST` et `PUT` acceptent du JSON, ou du `multipart/form-data` avec les champs en JSON dans `data` et une image optionnelle dans `photo` (JPEG, PNG, WebP ou GIF, 5 Mo max). Les réponses contiennent `photoUrl`, l'adresse de la photo, ou `null`.
+
+Organisation : `routes` (URL) → `controllers` (HTTP uniquement) → `services` (logique métier) → `models` (Sequelize). Les erreurs levées par les services sont converties en réponses HTTP dans `middlewares/error.middleware.ts`.
+
+Erreurs renvoyées en JSON (`{ "message": ... }`) : 400 données invalides, 404 introuvable, 401 identifiants incorrects, 409 identifiant ou e-mail déjà utilisé, 413 photo trop lourde, 500 erreur serveur.
 
 ## Front
 

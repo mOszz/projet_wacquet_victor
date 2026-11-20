@@ -1,11 +1,15 @@
 import cors from 'cors';
-import express, { NextFunction, Request, Response } from 'express';
-import { UniqueConstraintError, ValidationError } from 'sequelize';
+import express from 'express';
 import { config } from './config';
+import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
 import { initDatabase } from './models';
 import initRoutes from './routes';
 
 const app = express();
+
+// Render serves the API through a proxy: trust its X-Forwarded-* headers, so
+// `req.protocol` is "https" in the photo URLs built by the controllers.
+app.set('trust proxy', 1);
 
 // The Angular front is served from another domain: allow cross-origin calls.
 app.use(cors());
@@ -18,25 +22,8 @@ app.get('/health', (_req, res) => {
 
 initRoutes(app);
 
-// Unknown routes answer JSON, like the rest of the API.
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({ message: 'Route inconnue.' });
-});
-
-// Errors thrown by the controllers end up here (Express 5 forwards rejected promises).
-// Express recognises an error handler by its 4 parameters, so `_next` must stay.
-app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
-  if (error instanceof UniqueConstraintError) {
-    res.status(409).json({ message: 'Cet identifiant ou cet e-mail est déjà utilisé.' });
-  } else if (error instanceof ValidationError) {
-    res.status(400).json({ message: error.errors.map((e) => e.message).join(' ') });
-  } else if (error instanceof SyntaxError) {
-    res.status(400).json({ message: 'Corps de requête JSON invalide.' });
-  } else {
-    console.error(error);
-    res.status(500).json({ message: 'Erreur interne du serveur.' });
-  }
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 // Start listening only once the database is ready.
 initDatabase()
