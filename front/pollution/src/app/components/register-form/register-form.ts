@@ -1,16 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { createEmptyUser, RegisteredUser, User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { PasswordMatch } from '../../validators/password-match.directive';
 
 @Component({
   selector: 'app-register-form',
-  imports: [FormsModule, PasswordMatch],
+  imports: [FormsModule, PasswordMatch, RouterLink],
   templateUrl: './register-form.html',
   styleUrl: './register-form.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterForm {
   private readonly userService = inject(UserService);

@@ -16,6 +16,7 @@ const pollutions: Pollution[] = [
     latitude: 43.2965,
     longitude: 5.3698,
     indiceDangerosite: 15,
+    photoUrl: null,
   },
   {
     id: 2,
@@ -27,6 +28,7 @@ const pollutions: Pollution[] = [
     latitude: 45.764,
     longitude: 4.8357,
     indiceDangerosite: 120,
+    photoUrl: null,
   },
   {
     id: 3,
@@ -38,6 +40,7 @@ const pollutions: Pollution[] = [
     latitude: 48.8566,
     longitude: 2.3522,
     indiceDangerosite: 45,
+    photoUrl: null,
   },
 ];
 let nextId = pollutions.length + 1;
@@ -55,7 +58,12 @@ export function handlePollutions(
       case 'GET':
         return mockResponse(structuredClone(pollutions));
       case 'POST': {
-        const created: Pollution = { ...(req.body as PollutionInput), id: nextId++ };
+        const { fields, photo } = readBody(req);
+        const created: Pollution = {
+          ...fields,
+          id: nextId++,
+          photoUrl: photo ? URL.createObjectURL(photo) : null,
+        };
         pollutions.push(created);
         return mockResponse(structuredClone(created), 201);
       }
@@ -72,14 +80,28 @@ export function handlePollutions(
   switch (req.method) {
     case 'GET':
       return mockResponse(structuredClone(pollutions[index]));
-    case 'PUT':
+    case 'PUT': {
+      const { fields, photo, removePhoto } = readBody(req);
+      const current = pollutions[index].photoUrl;
+      // Same rules as the API: a new photo replaces, removePhoto deletes, otherwise kept.
+      const photoUrl = photo ? URL.createObjectURL(photo) : removePhoto ? null : current;
       // The id comes from the URL, never from the body.
-      pollutions[index] = { ...(req.body as PollutionInput), id };
+      pollutions[index] = { ...fields, id, photoUrl };
       return mockResponse(structuredClone(pollutions[index]));
+    }
     case 'DELETE':
       pollutions.splice(index, 1);
       return mockResponse(null, 204);
     default:
       return null;
   }
+}
+
+/** Reads the multipart body sent by PollutionService: JSON fields in `data`, file in `photo`. */
+function readBody(req: HttpRequest<unknown>) {
+  const body = req.body as FormData;
+  const { removePhoto, ...fields } = JSON.parse(body.get('data') as string) as PollutionInput & {
+    removePhoto: boolean;
+  };
+  return { fields, removePhoto, photo: body.get('photo') as File | null };
 }

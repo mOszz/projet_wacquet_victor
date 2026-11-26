@@ -1,18 +1,23 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { PollutionRecap } from '../../components/pollution-recap/pollution-recap';
 import { Pollution } from '../../models/pollution.model';
+import { AuthService } from '../../services/auth.service';
 import { PollutionService } from '../../services/pollution.service';
 
 @Component({
   selector: 'app-pollution-detail',
   imports: [PollutionRecap, RouterLink],
   templateUrl: './pollution-detail.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PollutionDetail {
   private readonly pollutionService = inject(PollutionService);
   private readonly router = inject(Router);
+
+  /** Editing and deleting are reserved to logged-in users. */
+  protected readonly isLoggedIn = inject(AuthService).isLoggedIn;
 
   /** `:id` route parameter (bound by withComponentInputBinding). */
   readonly id = input.required<string>();

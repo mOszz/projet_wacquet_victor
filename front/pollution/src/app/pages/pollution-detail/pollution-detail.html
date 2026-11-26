@@ -13,9 +13,11 @@
   }
 
   <app-pollution-recap [pollution]="p" heading="Déclaration">
-    <a class="btn" [routerLink]="['/pollutions', p.id, 'edit']">Modifier</a>
-    <button type="button" class="btn btn-danger" [disabled]="deleting()" (click)="remove(p)">
-      {{ deleting() ? 'Suppression…' : 'Supprimer' }}
-    </button>
+    @if (isLoggedIn()) {
+      <a class="btn" [routerLink]="['/pollutions', p.id, 'edit']">Modifier</a>
+      <button type="button" class="btn btn-danger" [disabled]="deleting()" (click)="remove(p)">
+        {{ deleting() ? 'Suppression…' : 'Supprimer' }}
+      </button>
+    }
   </app-pollution-recap>
 }

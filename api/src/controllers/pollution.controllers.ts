@@ -1,80 +1,65 @@
 import { Request, Response } from 'express';
-import db from '../models';
-import { PollutionCreationAttributes } from '../models/pollutions.model';
+import { PollutionInstance } from '../models/pollutions.model';
+import { PollutionData, pollutionService } from '../services/pollution.service';
 
-// Errors thrown here (invalid data, database down...) are sent by the error handler in index.ts.
+// Controllers only translate HTTP <-> service calls; the logic lives in pollution.service.ts.
+// Errors (404, invalid data...) are thrown by the service and sent by error.middleware.ts.
 
 type IdParams = { id: string };
 
-/** Keeps only the editable fields: the id comes from the URL or the database, never from the body. */
-function toPollutionData(body: Partial<PollutionCreationAttributes> = {}): PollutionCreationAttributes {
-  const {
-    titre,
-    type,
-    description,
-    dateObservation,
-    lieu,
-    latitude,
-    longitude,
-    indiceDangerosite,
-    photoUrl,
-  } = body;
-  // Missing required fields are left undefined and rejected by the model validation (400).
-  return {
-    titre,
-    type,
-    description,
-    dateObservation,
-    lieu,
-    latitude,
-    longitude,
-    indiceDangerosite,
-    photoUrl: photoUrl || null,
-  } as PollutionCreationAttributes;
-}
-
-/** Loads the pollution of `:id`, or answers 404 and returns null. */
-async function findPollution(req: Request<IdParams>, res: Response) {
-  const id = Number(req.params.id);
-  const pollution = Number.isInteger(id) ? await db.pollutions.findByPk(id) : null;
-  if (!pollution) {
-    res.status(404).json({ message: `Aucune pollution avec l'id ${req.params.id}.` });
-  }
-  return pollution;
-}
-
-/** GET /api/pollutions: every pollution, most recent observation first. */
-export async function getAll(_req: Request, res: Response): Promise<void> {
-  res.json(await db.pollutions.findAll({ order: [['dateObservation', 'DESC']] }));
+/** GET /api/pollutions */
+export async function getAll(req: Request, res: Response): Promise<void> {
+  const pollutions = await pollutionService.findAll();
+  res.json(pollutions.map((p) => toResponse(p, req)));
 }
 
 /** GET /api/pollutions/:id */
 export async function getById(req: Request<IdParams>, res: Response): Promise<void> {
-  const pollution = await findPollution(req, res);
-  if (pollution) {
-    res.json(pollution);
-  }
+  res.json(toResponse(await pollutionService.findById(Number(req.params.id)), req));
 }
 
-/** POST /api/pollutions */
+/** POST /api/pollutions: JSON, or multipart/form-data with `data` (JSON) and an optional `photo`. */
 export async function create(req: Request, res: Response): Promise<void> {
-  const pollution = await db.pollutions.create(toPollutionData(req.body));
-  res.status(201).json(pollution);
+  const created = await pollutionService.create(readData(req), req.file);
+  res.status(201).json(toResponse(created, req));
 }
 
-/** PUT /api/pollutions/:id: replaces every editable field. */
+/** PUT /api/pollutions/:id: same body as POST, plus `removePhoto: true` to delete the photo. */
 export async function update(req: Request<IdParams>, res: Response): Promise<void> {
-  const pollution = await findPollution(req, res);
-  if (pollution) {
-    res.json(await pollution.update(toPollutionData(req.body)));
-  }
+  const data = readData(req);
+  const updated = await pollutionService.update(
+    Number(req.params.id),
+    data,
+    req.file,
+    data.removePhoto === true,
+  );
+  res.json(toResponse(updated, req));
 }
 
 /** DELETE /api/pollutions/:id */
 export async function remove(req: Request<IdParams>, res: Response): Promise<void> {
-  const pollution = await findPollution(req, res);
-  if (pollution) {
-    await pollution.destroy();
-    res.status(204).end();
-  }
+  await pollutionService.remove(Number(req.params.id));
+  res.status(204).end();
+}
+
+/** GET /api/pollutions/:id/photo: the image itself, used as `<img src>` by the front. */
+export async function getPhoto(req: Request<IdParams>, res: Response): Promise<void> {
+  const photo = await pollutionService.findPhoto(Number(req.params.id));
+  // The browser revalidates (ETag) instead of showing an old photo after a replacement.
+  res.set('Cache-Control', 'no-cache').type(photo.mimetype).send(photo.buffer);
+}
+
+/** Pollution fields: the `data` part of a multipart request, or the JSON body. */
+function readData(req: Request): PollutionData & { removePhoto?: boolean } {
+  // An invalid `data` JSON throws a SyntaxError, answered with a 400.
+  return typeof req.body?.data === 'string' ? JSON.parse(req.body.data) : (req.body ?? {});
+}
+
+/** JSON sent to the front: no image bytes, but the URL where the photo can be loaded. */
+function toResponse(pollution: PollutionInstance, req: Request) {
+  const { photo: _photo, photoMimeType, ...fields } = pollution.get();
+  const photoUrl = photoMimeType
+    ? `${req.protocol}://${req.get('host')}/api/pollutions/${pollution.id}/photo`
+    : null;
+  return { ...fields, photoUrl };
 }

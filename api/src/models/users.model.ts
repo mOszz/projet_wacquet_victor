@@ -1,4 +1,4 @@
-import { randomBytes, scryptSync } from 'node:crypto';
+import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { DataTypes, Model, ModelStatic, Optional, Sequelize } from 'sequelize';
 
 // Same fields as the Angular `User` model, without the password confirmation.
@@ -21,6 +21,13 @@ export type UserModel = ModelStatic<UserInstance>;
 function hashPassword(password: string): string {
   const salt = randomBytes(16).toString('hex');
   return `${salt}:${scryptSync(password, salt, 64).toString('hex')}`;
+}
+
+/** Checks a plain password against the stored "salt:hash". */
+export function verifyPassword(password: string, stored: string): boolean {
+  const [salt, hash] = stored.split(':');
+  // Constant-time comparison, so response time does not leak how much of the hash matched.
+  return timingSafeEqual(Buffer.from(hash, 'hex'), scryptSync(password, salt, 64));
 }
 
 /** Defines the `users` table. Login and e-mail are unique (409 when already used). */

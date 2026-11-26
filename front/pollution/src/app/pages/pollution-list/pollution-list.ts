@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -11,6 +11,7 @@ import {
 } from '../../models/pollution.model';
 import { HighlightPollutionDirective } from '../../directives/highlight-pollution.directive';
 import { PollutionLevelPipe } from '../../pipes/pollution-level.pipe';
+import { AuthService } from '../../services/auth.service';
 import { PollutionService } from '../../services/pollution.service';
 
 @Component({
@@ -18,10 +19,13 @@ import { PollutionService } from '../../services/pollution.service';
   imports: [DatePipe, FormsModule, RouterLink, PollutionLevelPipe, HighlightPollutionDirective],
   templateUrl: './pollution-list.html',
   styleUrl: './pollution-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PollutionList {
   private readonly pollutionService = inject(PollutionService);
 
+  /** Deleting is reserved to logged-in users. */
+  protected readonly isLoggedIn = inject(AuthService).isLoggedIn;
   protected readonly types = POLLUTION_TYPES;
   protected readonly typeTags = POLLUTION_TYPE_TAGS;
   protected readonly pollutions = rxResource({

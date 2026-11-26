@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { handlePollutions } from './pollutions.mock';
-import { handleUsers } from './users.mock';
+import { handleLogin, handleUsers } from './users.mock';
 
 /**
  * Fake backend used while there is no API: answers the requests sent to
@@ -20,6 +20,9 @@ export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {
 
   let response = null;
   switch (resource) {
+    case 'login':
+      response = handleLogin(req);
+      break;
     case 'users':
       response = handleUsers(req);
       break;

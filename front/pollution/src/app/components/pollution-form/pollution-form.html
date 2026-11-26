@@ -139,17 +139,36 @@
     </div>
 
     <div class="field full">
-      <label for="photoUrl">Photo (URL) <span class="optional">optionnel</span></label>
+      <label for="photo"
+        >Photo <span class="optional">optionnel · JPEG, PNG, WebP, GIF · 5 Mo max</span></label
+      >
+
+      @if (currentPhotoUrl(); as url) {
+        <div class="current-photo">
+          <img [src]="url" alt="Photo actuelle" />
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              [checked]="removePhoto()"
+              (change)="onRemovePhotoChange($event)"
+            />
+            Supprimer la photo actuelle
+          </label>
+        </div>
+      }
+
       <input
-        id="photoUrl"
-        type="url"
-        formControlName="photoUrl"
-        placeholder="https://…"
-        [attr.aria-invalid]="showError('photoUrl')"
-        aria-describedby="photoUrl-error"
+        id="photo"
+        type="file"
+        [accept]="photoTypes"
+        (change)="onPhotoSelected($event)"
+        [attr.aria-invalid]="!!photoError()"
+        aria-describedby="photo-error"
       />
-      @if (showError('photoUrl')) {
-        <p class="error" id="photoUrl-error">{{ errorMessage('photoUrl') }}</p>
+      @if (photoError(); as message) {
+        <p class="error" id="photo-error">{{ message }}</p>
+      } @else if (photo() && currentPhotoUrl()) {
+        <p class="hint">Cette photo remplacera la photo actuelle.</p>
       }
     </div>
   </div>

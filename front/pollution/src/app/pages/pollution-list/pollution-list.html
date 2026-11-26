@@ -72,14 +72,16 @@
           </div>
           <div class="item-actions">
             <a class="btn" [routerLink]="['/pollutions', pollution.id]">Détail</a>
-            <button
-              type="button"
-              class="btn btn-danger"
-              [disabled]="deletingId() === pollution.id"
-              (click)="remove(pollution)"
-            >
-              {{ deletingId() === pollution.id ? 'Suppression…' : 'Supprimer' }}
-            </button>
+            @if (isLoggedIn()) {
+              <button
+                type="button"
+                class="btn btn-danger"
+                [disabled]="deletingId() === pollution.id"
+                (click)="remove(pollution)"
+              >
+                {{ deletingId() === pollution.id ? 'Suppression…' : 'Supprimer' }}
+              </button>
+            }
           </div>
         </li>
       }

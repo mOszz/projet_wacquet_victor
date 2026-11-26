@@ -3,7 +3,8 @@ import { DataTypes, Model, ModelStatic, Optional, Sequelize } from 'sequelize';
 // Same values as POLLUTION_TYPES in the Angular app.
 export const POLLUTION_TYPES = ['Plastique', 'Chimique', 'Dépôt sauvage', 'Eau', 'Air', 'Autre'];
 
-// Same fields as the Angular `Pollution` model (front/pollution/src/app/models).
+// Same fields as the Angular `Pollution` model (front/pollution/src/app/models),
+// except the photo: stored here as bytes, exposed to the front as a URL.
 export interface PollutionAttributes {
   id: number;
   titre: string;
@@ -14,14 +15,19 @@ export interface PollutionAttributes {
   latitude: number;
   longitude: number;
   indiceDangerosite: number;
-  photoUrl: string | null;
+  /** Image bytes (BYTEA). Excluded from queries by default: only the photo route reads it. */
+  photo: Buffer | null;
+  /** e.g. "image/png"; null when there is no photo. */
+  photoMimeType: string | null;
 }
 
-export type PollutionCreationAttributes = Optional<PollutionAttributes, 'id' | 'photoUrl'>;
+export type PollutionCreationAttributes = Optional<
+  PollutionAttributes,
+  'id' | 'photo' | 'photoMimeType'
+>;
 
 export interface PollutionInstance
-  extends Model<PollutionAttributes, PollutionCreationAttributes>,
-    PollutionAttributes {}
+  extends Model<PollutionAttributes, PollutionCreationAttributes>, PollutionAttributes {}
 
 export type PollutionModel = ModelStatic<PollutionInstance>;
 
@@ -46,13 +52,16 @@ export default function definePollutions(sequelize: Sequelize): PollutionModel {
         defaultValue: 0,
         validate: { min: 0 },
       },
-      photoUrl: { type: DataTypes.STRING, allowNull: true, validate: { isUrl: true } },
+      photo: { type: DataTypes.BLOB, allowNull: true },
+      photoMimeType: { type: DataTypes.STRING, allowNull: true },
     },
     {
       tableName: 'pollution',
       timestamps: false,
-      // camelCase in the code, snake_case columns in PostgreSQL (date_observation, photo_url).
+      // camelCase in the code, snake_case columns in PostgreSQL (date_observation, photo_mime_type).
       underscored: true,
+      // Lists and details never load the image bytes, which can weigh several MB.
+      defaultScope: { attributes: { exclude: ['photo'] } },
     },
   );
 }
